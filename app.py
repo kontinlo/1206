@@ -78,10 +78,10 @@ def handle_location_message(event):
         parking_address = nearest_parking.get('停車場地址-地號', 'No Address')
         google_maps_link = f"https://www.google.com/maps/dir/?api=1&destination={parking_lat},{parking_lon}"
 
-        reply_message = f"Closest parking lot:\n" \
-                        f"Name: {parking_name}\n" \
-                        f"Address: {parking_address}\n" \
-                        f"Navigation: {google_maps_link}"
+        reply_message = f"最近的停車場:\n" \
+                        f"名稱: {parking_name}\n" \
+                        f"地址: {parking_address}\n" \
+                        f"導航: {google_maps_link}"
 
         # Reply to the user
         line_bot_api.reply_message(
