@@ -9,7 +9,7 @@ import math
 import os
 
 app = Flask(__name__)
-Configuration = Configuration(access_token=os.getenv('CHANNEL_ACCESS_TOKEN'))
+configuration = LineBotApi(access_token=os.getenv('CHANNEL_ACCESS_TOKEN'))
 line_handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 
 @app.route("/webhook", methods=['POST'])
