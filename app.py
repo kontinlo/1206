@@ -6,9 +6,11 @@ import config
 import json
 import math
 
+import os
+
 app = Flask(__name__)
-line_bot_api = LineBotApi(config.CHANNEL_ACCESS_TOKEN)
-handler = WebhookHandler(config.CHANNEL_SECRET)
+Configuration = Configuration(access_token=os.getenv('CHANNEL_ACCESS_TOKEN'))
+line_handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 
 @app.route("/webhook", methods=['POST'])
 def webhook():
@@ -22,7 +24,7 @@ def webhook():
     body = request.get_data(as_text=True)
 
     try:
-        handler.handle(body, signature)
+        line_handler.handle(body, signature)
         return 'OK', 200
     except InvalidSignatureError:
         abort(400)
@@ -40,7 +42,7 @@ def haversine(lat1, lon1, lat2, lon2):
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     distance = R * c
     return distance
-@handler.add(MessageEvent, message=LocationMessage)
+@line_handler.add(MessageEvent, message=LocationMessage)
 def handle_location_message(event):
     try:
         # Load parking lot data
@@ -102,7 +104,7 @@ def handle_location_message(event):
         )
 
 
-@handler.add(MessageEvent)
+@line_handler.add(MessageEvent)
 def handle_message(event):
     if event.message.type != 'location':
         line_bot_api.reply_message(
